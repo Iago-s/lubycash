@@ -1,13 +1,17 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
+
+import User from '../../Models/User';
 
 export default class UsersController {
-  public async index({ request, response }: HttpContextContract) {
-    return response.json({ message: 'Controller' });
+  public async index() {
+    const users = await User.all();
+
+    return users;
   }
 
   public async store({ request, response }: HttpContextContract) {
     const {
-      fullName,
+      full_name,
       email,
       password,
       phone,
@@ -21,7 +25,7 @@ export default class UsersController {
     } = request.all();
 
     const data = {
-      fullName,
+      full_name,
       email,
       password,
       phone,
