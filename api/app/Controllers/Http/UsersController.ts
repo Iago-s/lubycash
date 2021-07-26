@@ -1,5 +1,6 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
 
+import Producer from '../../../services/kafkaServices/Producer';
 import User from '../../Models/User';
 
 export default class UsersController {
@@ -36,10 +37,27 @@ export default class UsersController {
       address,
       address_number,
       average_salary,
+    };
+
+    const producer = new Producer();
+
+    try {
+      await producer.produce({
+        topic: 'users',
+        messages: [{
+          value: JSON.stringify(data)
+        }],
+      });
+
+      return response
+        .status(201)
+        .json(
+          {
+            message: 'Conta criada com sucesso. Você vai receber um email com seu status'
+          }
+        );
+    } catch(err) {
+      return response.status(404).json({ message: err.message });
     }
-
-    //Call MS producer data
-
-    return response.json(data);
   }
 }
