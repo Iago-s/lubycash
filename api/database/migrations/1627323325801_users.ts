@@ -19,6 +19,8 @@ export default class Users extends BaseSchema {
       table.float('average_salary')
       table.float('current_balance')
       table.boolean('status')
+      table.string('token')
+      table.timestamp('token_created_at', { useTz: true })
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

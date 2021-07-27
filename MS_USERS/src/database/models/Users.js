@@ -54,6 +54,14 @@ const User = connection.define('user', {
     type: Sequelize.BOOLEAN,
     allowNull: false,
   },
+  token: {
+    type: Sequelize.STRING,
+    allowNull: true,
+  },
+  token_created_at: {
+    type: Sequelize.DATE,
+    allowNull: true,
+  },
 });
 
 connection.sync({ force: false });
