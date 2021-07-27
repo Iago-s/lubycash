@@ -1,4 +1,5 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
+import UserValidator from 'App/Validators/UserValidator';
 
 import Producer from '../../../services/kafkaServices/Producer';
 import User from '../../Models/User';
@@ -11,37 +12,40 @@ export default class UsersController {
   }
 
   public async store({ request, response }: HttpContextContract) {
-    const {
-      full_name,
-      email,
-      password,
-      phone,
-      cpf_number,
-      zipcode,
-      city,
-      state,
-      address,
-      address_number,
-      average_salary
-    } = request.all();
-
-    const data = {
-      full_name,
-      email,
-      password,
-      phone,
-      cpf_number,
-      zipcode,
-      city,
-      state,
-      address,
-      address_number,
-      average_salary,
-    };
-
-    const producer = new Producer();
 
     try {
+      await request.validate(UserValidator);
+
+      const {
+        full_name,
+        email,
+        password,
+        phone,
+        cpf_number,
+        zipcode,
+        city,
+        state,
+        address,
+        address_number,
+        average_salary
+      } = request.all();
+
+      const data = {
+        full_name,
+        email,
+        password,
+        phone,
+        cpf_number,
+        zipcode,
+        city,
+        state,
+        address,
+        address_number,
+        average_salary,
+      };
+
+      const producer = new Producer();
+
       await producer.produce({
         topic: 'users',
         messages: [{
@@ -57,7 +61,7 @@ export default class UsersController {
           }
         );
     } catch(err) {
-      return response.status(404).json({ message: err.message });
+      return response.badRequest({message: err.message});
     }
   }
 }
