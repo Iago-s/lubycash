@@ -44,6 +44,12 @@ export default class User extends BaseModel {
   @column()
   public status: boolean
 
+  @column()
+  public token: string
+
+  @column()
+  public token_created_at: DateTime
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
