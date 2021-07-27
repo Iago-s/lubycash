@@ -1,4 +1,6 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import ForgotPasswordValidator from '../../Validators/ForgotPasswordValidator';
+import UpdatePasswordValidator from 'App/Validators/UpdatePasswordValidator';
 
 import User from '../../Models/User';
 import Mail from '../../../services/nodemailerServices/Mail';
@@ -9,6 +11,8 @@ const moment = require('moment');
 export default class ForgotPasswordsController {
   async store({ request, response }: HttpContextContract) {
     try {
+      await request.validate(ForgotPasswordValidator);
+
       const email = request.input('email');
       const user = await User.findByOrFail('email', email);
 
@@ -33,6 +37,8 @@ export default class ForgotPasswordsController {
 
   async update({ request, response }: HttpContextContract) {
     try {
+      await request.validate(UpdatePasswordValidator);
+
       const { token, password } = request.all();
       const user = await User.findByOrFail('token', token);
 
@@ -54,7 +60,7 @@ export default class ForgotPasswordsController {
 
       return response.json({ message: 'Senha alterada com sucesso!' });
     } catch (err) {
-      return response.status(404).json({ message: 'Token invalido.'})
+      return response.status(404).json({ message: err.message})
     }
   }
 
