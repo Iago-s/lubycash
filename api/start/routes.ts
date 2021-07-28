@@ -32,4 +32,7 @@ Route.post('/pix', 'UserPixesController.store');
 Route.post('/passwords', 'UsersForgotPasswordsController.store');
 Route.put('/passwords', 'UsersForgotPasswordsController.update');
 
+Route.get('/admin', 'AdminsController.index');
+Route.post('/admin', 'AdminsController.store');
+
 Route.get('/admin/extracts/:id', 'AdminExtractsController.index');
