@@ -1,4 +1,4 @@
-import { BaseModel, column, hasOne, HasOne } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
 
 import User from './User'
 
@@ -6,8 +6,8 @@ export default class Extract extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
-  @hasOne(() => User)
-  public extract: HasOne<typeof User>
+  @hasMany(() => User)
+  public extract: HasMany<typeof User>
 
   @column()
   public user_id: number
