@@ -31,3 +31,5 @@ Route.post('/pix', 'UserPixesController.store');
 
 Route.post('/passwords', 'UsersForgotPasswordsController.store');
 Route.put('/passwords', 'UsersForgotPasswordsController.update');
+
+Route.get('/admin/extracts/:id', 'AdminExtractsController.index');
