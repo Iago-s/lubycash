@@ -27,7 +27,7 @@ Route.get('/', async () => {
 Route.get('/users', 'UsersController.index');
 Route.post('/users', 'UsersController.store');
 
-Route.post('/pix', 'UsersController.pix');
+Route.post('/pix', 'UserPixesController.store');
 
 Route.post('/passwords', 'UsersForgotPasswordsController.store');
 Route.put('/passwords', 'UsersForgotPasswordsController.update');
