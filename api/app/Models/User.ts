@@ -50,8 +50,8 @@ export default class User extends BaseModel {
   public token_created_at: Date | null
 
   @column()
-  public createdAt: Date
+  public created_at: Date
 
   @column()
-  public updatedAt: Date
+  public updated_at: Date
 }

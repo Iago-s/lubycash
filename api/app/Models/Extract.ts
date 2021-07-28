@@ -22,8 +22,8 @@ export default class Extract extends BaseModel {
   public transfer_amount: number
 
   @column()
-  public createdAt: Date
+  public created_at: Date
 
   @column()
-  public updatedAt: Date
+  public updated_at: Date
 }

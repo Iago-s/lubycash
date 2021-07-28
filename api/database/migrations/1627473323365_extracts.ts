@@ -8,19 +8,16 @@ export default class Extracts extends BaseSchema {
       table.increments('id').primary()
       table
         .integer('user_id')
+        .notNullable()
         .unsigned()
         .references('users.id')
         .onUpdate('CASCADE')
         .onDelete('CASCADE')
-      table.string('type')
-      table.string('name_destination')
-      table.float('transfer_amount')
+      table.string('type').notNullable()
+      table.string('name_destination').notNullable()
+      table.float('transfer_amount').notNullable()
 
-      /**
-       * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
-       */
-      table.timestamp('createdAt', { useTz: true })
-      table.timestamp('updatedAt', { useTz: true })
+      table.timestamps();
     })
   }
 
