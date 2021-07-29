@@ -4,7 +4,7 @@ import User from 'App/Models/User';
 import Extract from 'App/Models/Extract';
 
 export default class AdminExtractsController {
-  async index({ response, params }: HttpContextContract) {
+  async getExtracts({ response, params }: HttpContextContract) {
     const { id } = params;
 
     try {

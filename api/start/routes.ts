@@ -40,5 +40,6 @@ Route.put('/admin/passwords', 'AdminsForgotPasswordsController.update');
 
 Route.group(() => {
   Route.post('/admin', 'AdminsController.store');
-  Route.get('/admin/extracts/:id', 'AdminExtractsController.index');
+  Route.get('/admin/extracts/:id', 'AdminActionsController.getExtracts');
+  Route.get('/admin/users', 'AdminActionsController.getUsers')
 }).middleware('auth:admin');
