@@ -30,7 +30,7 @@ Route.post('/users/login', 'UserSessionsController.store');
 Route.post('/users/passwords', 'UsersForgotPasswordsController.store');
 Route.put('/users/passwords', 'UsersForgotPasswordsController.update');
 
-Route.post('/pix', 'UserPixesController.store');
+Route.post('/pix', 'UserPixesController.store').middleware('auth:user');
 
 Route.get('/admin', 'AdminsController.index');
 Route.post('/admin', 'AdminsController.store');

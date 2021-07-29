@@ -25,10 +25,6 @@ export default class UsersPixValidator {
 	 *    ```
 	 */
   public schema = schema.create({
-    cpf_number_user: schema.string({}, [
-      rules.required(),
-    ]),
-
     cpf_number_destination: schema.string({}, [
       rules.required(),
     ]),

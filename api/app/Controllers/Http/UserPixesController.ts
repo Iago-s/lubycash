@@ -6,13 +6,15 @@ import Extract from 'App/Models/Extract';
 import UsersPixValidator from 'App/Validators/UsersPixValidator';
 
 export default class UserPixesController {
-  public async store({ request, response }: HttpContextContract) {
+  public async store({ request, response, auth }: HttpContextContract) {
     try {
+      await auth.use('user').authenticate();
+
       await request.validate(UsersPixValidator);
 
-      const { cpf_number_user, cpf_number_destination, transfer_amount } = request.all();
+      const user = auth.use('user').user;
+      const { cpf_number_destination, transfer_amount } = request.all();
 
-      const user = await User.findByOrFail('cpf_number', cpf_number_user);
       const user_destination = await User.findByOrFail('cpf_number', cpf_number_destination);
 
       if(user && user_destination) {
@@ -57,7 +59,7 @@ export default class UserPixesController {
 
       return response.json({message: 'User not found.'});
     } catch(err) {
-      return response.json({message: err.message});
+      return response.json({ message: err.message });
     }
   }
 }
