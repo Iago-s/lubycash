@@ -33,9 +33,12 @@ Route.put('/users/passwords', 'UsersForgotPasswordsController.update');
 Route.post('/pix', 'UserPixesController.store').middleware('auth:user');
 
 Route.get('/admin', 'AdminsController.index');
-Route.post('/admin', 'AdminsController.store');
+
 Route.post('/admins/login', 'AdminSessionsController.store');
 Route.post('/admin/passwords', 'AdminsForgotPasswordsController.store');
 Route.put('/admin/passwords', 'AdminsForgotPasswordsController.update');
 
-Route.get('/admin/extracts/:id', 'AdminExtractsController.index');
+Route.group(() => {
+  Route.post('/admin', 'AdminsController.store');
+  Route.get('/admin/extracts/:id', 'AdminExtractsController.index');
+}).middleware('auth:admin');

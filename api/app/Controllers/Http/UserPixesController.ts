@@ -8,8 +8,6 @@ import UsersPixValidator from 'App/Validators/UsersPixValidator';
 export default class UserPixesController {
   public async store({ request, response, auth }: HttpContextContract) {
     try {
-      await auth.use('user').authenticate();
-
       await request.validate(UsersPixValidator);
 
       const user = auth.use('user').user;
