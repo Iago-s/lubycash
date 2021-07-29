@@ -1,4 +1,5 @@
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm';
+import { DateTime } from 'luxon';
 
 export default class Extract extends BaseModel {
   @column({ isPrimary: true })
@@ -16,9 +17,9 @@ export default class Extract extends BaseModel {
   @column()
   public transfer_amount: number
 
-  @column()
-  public created_at: Date
+  @column.dateTime({ autoCreate: true })
+  public created_at: DateTime
 
-  @column()
-  public updated_at: Date
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  public updated_at: DateTime
 }

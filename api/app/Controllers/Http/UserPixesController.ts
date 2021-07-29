@@ -35,8 +35,6 @@ export default class UserPixesController {
               type: 'PIX REALIZADO',
               name_destination: user_destination.full_name,
               transfer_amount: transfer_amount,
-              created_at: new Date(),
-              updated_at: new Date(),
             });
 
             await Extract.create({
@@ -44,8 +42,6 @@ export default class UserPixesController {
               type: 'PIX RECEBIDO',
               name_destination: user.full_name,
               transfer_amount: transfer_amount,
-              created_at: new Date(),
-              updated_at: new Date(),
             });
 
             return response.json({message: 'Parabéns PIX realizado'});
