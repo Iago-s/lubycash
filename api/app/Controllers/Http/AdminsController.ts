@@ -38,8 +38,6 @@ export default class AdminsController {
         state,
         address,
         address_number,
-        created_at: new Date(),
-        updated_at: new Date(),
       };
 
       const admin = await Admin.create(data);

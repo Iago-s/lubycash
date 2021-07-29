@@ -1,3 +1,4 @@
+const argon2 = require('argon2');
 const Mail = require('../services/Mail');
 
 const User = require('../database/models/Users');
@@ -12,15 +13,18 @@ class CreateUser {
       data.status = false;
     }
 
-    await User.create(data);
+    try {
+      data.password = await argon2.hash(data.password);
+      await User.create(data);
 
-    const service = new Mail();
+      const service = new Mail();
 
-    await service.sendMail({
-      name: data.full_name,
-      email: data.email,
-      status: data.status,
-    });
+      await service.sendMail({
+        name: data.full_name,
+        email: data.email,
+        status: data.status,
+      });
+    } catch (err) {}
   }
 }
 

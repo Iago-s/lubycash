@@ -26,13 +26,15 @@ Route.get('/', async () => {
 
 Route.get('/users', 'UsersController.index');
 Route.post('/users', 'UsersController.store');
-Route.post('/passwords', 'UsersForgotPasswordsController.store');
-Route.put('/passwords', 'UsersForgotPasswordsController.update');
+Route.post('/users/login', 'UserSessionsController.store');
+Route.post('/users/passwords', 'UsersForgotPasswordsController.store');
+Route.put('/users/passwords', 'UsersForgotPasswordsController.update');
 
 Route.post('/pix', 'UserPixesController.store');
 
 Route.get('/admin', 'AdminsController.index');
 Route.post('/admin', 'AdminsController.store');
+Route.post('/admins/login', 'AdminSessionsController.store');
 Route.post('/admin/passwords', 'AdminsForgotPasswordsController.store');
 Route.put('/admin/passwords', 'AdminsForgotPasswordsController.update');
 
