@@ -1,4 +1,5 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
+import Database from '@ioc:Adonis/Lucid/Database';
 
 import User from 'App/Models/User';
 import Extract from 'App/Models/Extract';
@@ -8,7 +9,11 @@ import UsersPixValidator from 'App/Validators/UsersPixValidator';
 export default class UserPixesController {
   public async store({ request, response, auth }: HttpContextContract) {
     try {
-      await request.validate(UsersPixValidator);
+      try {
+        await request.validate(UsersPixValidator);
+      } catch(err) {
+        return response.status(err.status).json({ message: err.message });
+      }
 
       const user = auth.use('user').user;
       const { cpf_number_destination, transfer_amount } = request.all();
@@ -24,6 +29,8 @@ export default class UserPixesController {
 
             user_destination.current_balance += transfer_amount;
             user.current_balance -= transfer_amount;
+
+            const trx = await Database.beginGlobalTransaction();
 
             await user_destination.save();
             await user.save();
@@ -42,18 +49,18 @@ export default class UserPixesController {
               transfer_amount: transfer_amount,
             });
 
-            return response.json({message: 'Parabéns PIX realizado'});
+            await trx.commit();
+
+            return response.json({ message: 'Parabéns PIX realizado' });
           }
 
-          return response.json({message: 'Você não tem saldo suficiente para essa transferencia.'});
+          return response.json({ message: 'Você não tem saldo suficiente para essa transferencia.' });
         }
 
-        return response.json({message: 'Você não está apto a fazer PIX.'});
+        return response.json({ message: 'Você não está apto a fazer PIX.' });
       }
-
-      return response.json({message: 'User not found.'});
     } catch(err) {
-      return response.json({ message: err.message });
+      return response.status(err.status).json({ message: err.message });
     }
   }
 }
