@@ -1,15 +1,20 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
+
+import AuthValidator from 'App/Validators/AuthValidator';
 
 export default class AdminSessionsController {
   async store({ request, response, auth }: HttpContextContract) {
-    const email = request.input('email');
-    const password = request.input('password');
-
     try {
+      await request.validate(AuthValidator);
+
+      const email = request.input('email');
+      const password = request.input('password');
+
       const token = await auth.use('admin').attempt(email, password);
+
       return token;
     } catch(err) {
-      return response.json({message: err.message});
+      return response.status(err.status).json({ message: err.message });
     }
   }
 }
