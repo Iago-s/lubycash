@@ -5,10 +5,14 @@ import Producer from '../../../services/kafkaServices/Producer';
 import User from '../../Models/User';
 
 export default class UsersController {
-  public async index() {
-    const users = await User.all();
+  public async index({ response }: HttpContextContract) {
+    try {
+      const users = await User.all();
 
-    return users;
+      return users;
+    } catch(err) {
+      return response.status(500).json(err);
+    }
   }
 
   public async store({ request, response }: HttpContextContract) {
@@ -26,7 +30,7 @@ export default class UsersController {
         state,
         address,
         address_number,
-        average_salary
+        average_salary,
       } = request.all();
 
       const data = {
@@ -48,7 +52,7 @@ export default class UsersController {
       await producer.produce({
         topic: 'users',
         messages: [{
-          value: JSON.stringify(data)
+          value: JSON.stringify(data),
         }],
       });
 
@@ -56,11 +60,11 @@ export default class UsersController {
         .status(201)
         .json(
           {
-            message: 'Conta criada com sucesso. Você vai receber um email com seu status'
+            message: 'Conta criada com sucesso. Você vai receber um email com seu status',
           }
         );
     } catch(err) {
-      return response.badRequest({message: err.message});
+      return response.status(400).json({ message: err.message });
     }
   }
 }
