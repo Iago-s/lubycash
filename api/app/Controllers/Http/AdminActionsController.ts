@@ -21,9 +21,11 @@ export default class AdminExtractsController {
   async getUsers({ request, response }: HttpContextContract) {
     const querys = request.qs();
     var users;
-    var match = querys?.date.match(/([0-9][0-9])\/([0-9][0-9])\/([0-9][0-9][0-9][0-9])/);
+    var match;
 
     if(querys?.date && !querys?.status) {
+      match = querys?.date.match(/([0-9][0-9])\/([0-9][0-9])\/([0-9][0-9][0-9][0-9])/);
+
       if(match?.length === 4) {
         users =
           await (await User.query())
@@ -60,6 +62,8 @@ export default class AdminExtractsController {
     }
 
     if(querys?.date && querys?.status) {
+      match = querys?.date.match(/([0-9][0-9])\/([0-9][0-9])\/([0-9][0-9][0-9][0-9])/);
+
       if(match?.length === 4) {
         if(querys?.status && querys.status.toLowerCase() === 'negado') {
           try {
