@@ -1,11 +1,10 @@
-const argon2 = require('argon2');
-const Mail = require('../services/Mail');
+const Mail = require('./Mail');
 
-const User = require('../database/models/Users');
+const Client = require('../database/models/Client');
 
-class CreateUser {
+class CreateClient {
   async execute(data) {
-    if (data.average_salary > 501) {
+    if (data.average_salary > 500) {
       data.current_balance = 200.0;
       data.status = true;
     } else {
@@ -14,8 +13,7 @@ class CreateUser {
     }
 
     try {
-      data.password = await argon2.hash(data.password);
-      await User.create(data);
+      await Client.create(data);
 
       const service = new Mail();
 
@@ -28,4 +26,4 @@ class CreateUser {
   }
 }
 
-module.exports = CreateUser;
+module.exports = CreateClient;

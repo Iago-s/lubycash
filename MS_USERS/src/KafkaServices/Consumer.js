@@ -1,6 +1,6 @@
 const { Kafka, logLevel } = require('kafkajs');
 
-const CreateUser = require('../services/CreateUser');
+const CreateClient = require('../services/CreateClient');
 
 class Consumer {
   consumer;
@@ -24,7 +24,7 @@ class Consumer {
         if (message.value !== undefined) {
           const data = JSON.parse(message.value);
 
-          const service = new CreateUser();
+          const service = new CreateClient();
 
           await service.execute(data);
         }
