@@ -17,7 +17,7 @@ import { AuthConfig } from '@ioc:Adonis/Addons/Auth';
 |
 */
 const authConfig: AuthConfig = {
-  guard: 'admin',
+  guard: 'api',
   guards: {
     /*
     |--------------------------------------------------------------------------
@@ -32,7 +32,7 @@ const authConfig: AuthConfig = {
     | on cookies/sessions.
     |
     */
-    user: {
+    api: {
       driver: 'oat',
 
       /*
@@ -51,7 +51,7 @@ const authConfig: AuthConfig = {
       tokenProvider: {
         type: 'api',
         driver: 'database',
-        table: 'users_tokens',
+        table: 'api_tokens',
         foreignKey: 'user_id',
       },
 
@@ -101,78 +101,6 @@ const authConfig: AuthConfig = {
         |
         */
         model: () => import('App/Models/User'),
-      },
-    },
-
-    admin: {
-      driver: 'oat',
-
-      /*
-      |--------------------------------------------------------------------------
-      | Tokens provider
-      |--------------------------------------------------------------------------
-      |
-      | Uses SQL database for managing tokens. Use the "database" driver, when
-      | tokens are the secondary mode of authentication.
-      | For example: The Github personal tokens
-      |
-      | The foreignKey column is used to make the relationship between the user
-      | and the token. You are free to use any column name here.
-      |
-      */
-      tokenProvider: {
-        type: 'api',
-        driver: 'database',
-        table: 'admin_tokens',
-        foreignKey: 'admin_id',
-      },
-
-      provider: {
-        /*
-        |--------------------------------------------------------------------------
-        | Driver
-        |--------------------------------------------------------------------------
-        |
-        | Name of the driver
-        |
-        */
-        driver: 'lucid',
-
-        /*
-        |--------------------------------------------------------------------------
-        | Identifier key
-        |--------------------------------------------------------------------------
-        |
-        | The identifier key is the unique key on the model. In most cases specifying
-        | the primary key is the right choice.
-        |
-        */
-        identifierKey: 'id',
-
-        /*
-        |--------------------------------------------------------------------------
-        | Uids
-        |--------------------------------------------------------------------------
-        |
-        | Uids are used to search a user against one of the mentioned columns. During
-        | login, the auth module will search the user mentioned value against one
-        | of the mentioned columns to find their user record.
-        |
-        */
-        uids: ['email'],
-
-        /*
-        |--------------------------------------------------------------------------
-        | Model
-        |--------------------------------------------------------------------------
-        |
-        | The model to use for fetching or finding users. The model is imported
-        | lazily since the config files are read way earlier in the lifecycle
-        | of booting the app and the models may not be in a usable state at
-        | that time.
-        |
-        */
-        model: () => import('App/Models/Admin'),
       },
     },
   },
