@@ -1,126 +1,119 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
-import UserValidator from 'App/Validators/UserValidator';
-import UserUpdateValidator from 'App/Validators/UserUpdateValidator';
 
-import Producer from '../../../services/kafkaServices/Producer';
+import UpdateUserValidator from 'App/Validators/UpdateUserValidator';
+import AdminValidator from 'App/Validators/AdminValidator';
+
 import User from '../../Models/User';
+import Admin from '../../Models/Admin';
 
 export default class UsersController {
-  public async index({ response }: HttpContextContract) {
+  public async index({ response, auth }: HttpContextContract) {
     try {
-      const users = await User.all();
+      const admin = auth.use('api').user;
 
-      return users;
+      if(admin?.rules === 'admin') {
+        const users = await User.all();
+
+        return response.json(users);
+      }
+
+      return response.status(401).json({ message: 'Você não tem permissão' });
     } catch(err) {
       return response.status(500).json(err);
     }
   }
 
-  public async store({ request, response }: HttpContextContract) {
+  public async store({ request, response, auth }: HttpContextContract) {
     try {
-      await request.validate(UserValidator);
+      const admin = auth.use('api').user;
 
-      const {
-        full_name,
-        email,
-        password,
-        phone,
-        cpf_number,
-        zipcode,
-        city,
-        state,
-        address,
-        address_number,
-        average_salary,
-      } = request.all();
+      if(admin?.rules === 'admin') {
+        await request.validate(AdminValidator);
 
-      const data = {
-        full_name,
-        email,
-        password,
-        phone,
-        cpf_number,
-        zipcode,
-        city,
-        state,
-        address,
-        address_number,
-        average_salary,
-      };
+        const {
+          full_name,
+          email,
+          password,
+          phone,
+          cpf_number,
+          zipcode,
+          city,
+          state,
+          address,
+        } = request.all();
 
-      const producer = new Producer();
+        const user = await User.create({
+          email,
+          password,
+          rules: 'admin',
+        });
 
-      await producer.produce({
-        topic: 'users',
-        messages: [{
-          value: JSON.stringify(data),
-        }],
-      });
+        const data = {
+          user_id: user.id,
+          full_name,
+          email,
+          phone,
+          cpf_number,
+          zipcode,
+          city,
+          state,
+          address,
+        };
 
-      return response
-        .status(201)
-        .json(
-          {
-            message: 'Conta criada com sucesso. Você vai receber um email com seu status',
-          }
-        );
+        const admin = await Admin.create(data);
+
+        return response.status(201).json(admin);
+      }
+
+      return response.status(401).json({ message: 'Você não tem permissão' });
     } catch(err) {
-      return response.status(400).json({ message: err.message });
+      return response.status(err.status).json({ message: err.message });
     }
   }
 
-  async update({ request, response, auth }: HttpContextContract) {
+  async update({ request, response, auth, params }: HttpContextContract) {
     try {
-      await request.validate(UserUpdateValidator);
+      await request.validate(UpdateUserValidator);
 
-      const user = await User.findByOrFail('id', auth.use('user').user?.id);
+      const { id } = params;
+      const { email, password } = request.all();
 
-      const {
-        full_name,
-        phone,
-        zipcode,
-        city,
-        state,
-        address,
-        address_number,
-        average_salary
-      } = request.all();
+      const admin = auth.use('api').user;
 
-      user.merge({
-        full_name,
-        phone,
-        zipcode,
-        city,
-        state,
-        address,
-        address_number,
-        average_salary,
-        status: average_salary >= 500 ? true : false,
-      });
+      if(admin?.rules === 'admin') {
+        const user = await User.findByOrFail('id', id);
 
-      await user.save();
+        user.merge({ email, password });
 
-      return response
-        .status(200)
-        .send({ message: 'Parabéns, seus dados foi alterado com sucesso!' });
+        await user.save();
+
+        return response.json({ message: 'Dados alterado!' });
+      }
+
+      return response.status(401).json({ message: 'Você não tem permissão' });
     } catch (err) {
       return response
         .status(err.status)
-        .send({ message: err.message });
+        .json({ message: err.message });
     }
   }
 
-  async destroy({ response, params }) {
+  async destroy({ response, params, auth }) {
     try {
-      const user = await User.findOrFail(params.id);
+      const { id } = params;
+      const admin = auth.use('api').user;
 
-      await user.delete();
+      if(admin?.rules === 'admin') {
+        const user = await User.findOrFail(id);
 
-      return response
-        .status(204)
-        .send();
+        user.delete();
+
+        return response.status(204).send();
+      }
+
+      return response.status(401).json({ message: 'Você não tem permissão' });
     } catch (err) {
-      return response.status(err.status).send({
+      return response.status(err.status).json({
         message: err.message,
       });
     }

@@ -25,35 +25,12 @@ export default class UserUpdateValidator {
 	 *    ```
 	 */
   public schema = schema.create({
-    full_name: schema.string({}, [
-      rules.required(),
+    email: schema.string({}, [
+      rules.email(),
+      rules.unique({ table: 'users', column: 'email'})
     ]),
 
-    phone: schema.string({}, [
-      rules.required(),
-    ]),
-
-    zipcode: schema.string({}, [
-      rules.required(),
-    ]),
-
-    city: schema.string({}, [
-      rules.required(),
-    ]),
-
-    state: schema.string({}, [
-      rules.required(),
-    ]),
-
-    address: schema.string({}, [
-      rules.required(),
-    ]),
-
-    address_number: schema.string({}, [
-      rules.required(),
-    ]),
-
-    average_salary: schema.number([
+    password: schema.string({}, [
       rules.required(),
     ]),
   });

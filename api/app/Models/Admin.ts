@@ -6,6 +6,9 @@ export default class Admin extends BaseModel {
   public id: number;
 
   @column()
+  public user_id: number;
+
+  @column()
   public full_name: string;
 
   @column()

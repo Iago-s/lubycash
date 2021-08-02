@@ -3,6 +3,7 @@ import AdminValidator from 'App/Validators/AdminValidator';
 import AdminUpdateValidator from 'App/Validators/AdminUpdateValidator';
 
 import Admin from 'App/Models/Admin';
+import User from 'App/Models/User';
 
 export default class AdminsController {
   public async index() {
@@ -25,27 +26,31 @@ export default class AdminsController {
         city,
         state,
         address,
-        address_number,
       } = request.all();
 
-      const data = {
-        full_name,
+      const user = await User.create({
         email,
         password,
+        rules: 'admin',
+      });
+
+      const data = {
+        user_id: user.id,
+        full_name,
+        email,
         phone,
         cpf_number,
         zipcode,
         city,
         state,
         address,
-        address_number,
       };
 
       const admin = await Admin.create(data);
 
       return response.status(201).json(admin);
     } catch(err) {
-      return response.badRequest({message: err.message});
+      return response.status(err.status).json({ message: err.message });
     }
   }
 

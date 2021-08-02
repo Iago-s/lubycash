@@ -20,31 +20,34 @@
 
 import Route from '@ioc:Adonis/Core/Route';
 
-Route.get('/', async () => {
-  return { hello: 'world' }
-});
-
-Route.post('/client', 'ClientsController.store');
-
 Route.post('/user/session', 'SessionsController.store');
 Route.post('/user/password', 'ForgotPasswordsController.store');
 Route.put('/user/password', 'ForgotPasswordsController.update');
 
-Route.get('/users', 'UsersController.index');
-Route.post('/users', 'UsersController.store');
-
+// Rotas privadas admins
 Route.group(() => {
-  Route.put('/users', 'UsersController.update');
-  Route.delete('/users/:id', 'UsersController.destroy');
-  Route.post('/users/pix', 'UserPixesController.store');
-}).middleware('auth:user');
+  Route.get('/user', 'UsersController.index');
+  Route.post('/user', 'UsersController.store');
+  Route.put('/user/:id', 'UsersController.update');
+  Route.delete('/user/:id', 'UsersController.destroy');
 
-Route.get('/admins', 'AdminsController.index');
+  Route.post('/clients', 'ClientsController.index');
+}).middleware('auth');
 
+//Rotas publicas client
+Route.get('/client', 'ClientsController.index');
+Route.post('/client', 'ClientsController.store');
+
+// Rotas privadas clients
 Route.group(() => {
-  Route.post('/admins', 'AdminsController.store');
+  Route.post('/client/pix', 'PixController.store');
+}).middleware('auth');
+
+/*Route.get('/admin', 'AdminsController.index');
+Route.post('/admin', 'AdminsController.store');
+Route.group(() => {
   Route.put('/admins', 'AdminsController.update');
   Route.delete('/admins/:id', 'AdminsController.destroy');
   Route.get('/admins/extracts/:id', 'AdminActionsController.getExtracts');
   Route.get('/admins/users', 'AdminActionsController.getUsers');
-}).middleware('auth:admin');
+}).middleware('auth:admin');*/
