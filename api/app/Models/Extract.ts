@@ -3,23 +3,23 @@ import { DateTime } from 'luxon';
 
 export default class Extract extends BaseModel {
   @column({ isPrimary: true })
-  public id: number
+  public id: number;
 
   @column()
-  public user_id: number
+  public client_id: number;
 
   @column()
-  public type: string
+  public type: string;
 
   @column()
-  public name_destination: string
+  public name_destination: string;
 
   @column()
-  public transfer_amount: number
+  public transfer_amount: number;
 
   @column.dateTime({ autoCreate: true })
-  public created_at: DateTime
+  public created_at: DateTime;
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updated_at: DateTime
+  public updated_at: DateTime;
 }
