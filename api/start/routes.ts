@@ -32,8 +32,6 @@ Route.put('/user/password', 'ForgotPasswordsController.update');
 
 Route.get('/users', 'UsersController.index');
 Route.post('/users', 'UsersController.store');
-Route.post('/users/passwords', 'UsersForgotPasswordsController.store');
-Route.put('/users/passwords', 'UsersForgotPasswordsController.update');
 
 Route.group(() => {
   Route.put('/users', 'UsersController.update');
@@ -42,8 +40,6 @@ Route.group(() => {
 }).middleware('auth:user');
 
 Route.get('/admins', 'AdminsController.index');
-Route.post('/admins/passwords', 'AdminsForgotPasswordsController.store');
-Route.put('/admins/passwords', 'AdminsForgotPasswordsController.update');
 
 Route.group(() => {
   Route.post('/admins', 'AdminsController.store');
