@@ -31,18 +31,20 @@ Route.post('/users/passwords', 'UsersForgotPasswordsController.store');
 Route.put('/users/passwords', 'UsersForgotPasswordsController.update');
 
 Route.group(() => {
-  Route.put('/users', 'UsersController.update').middleware('auth:user');
-  Route.delete('/users/:id', 'UsersController.destroy').middleware('auth:user');
-  Route.post('/users/pix', 'UserPixesController.store').middleware('auth:user');
+  Route.put('/users', 'UsersController.update');
+  Route.delete('/users/:id', 'UsersController.destroy');
+  Route.post('/users/pix', 'UserPixesController.store');
 }).middleware('auth:user');
 
-Route.get('/admin', 'AdminsController.index');
+Route.get('/admins', 'AdminsController.index');
 Route.post('/admins/login', 'AdminSessionsController.store');
-Route.post('/admin/passwords', 'AdminsForgotPasswordsController.store');
-Route.put('/admin/passwords', 'AdminsForgotPasswordsController.update');
+Route.post('/admins/passwords', 'AdminsForgotPasswordsController.store');
+Route.put('/admins/passwords', 'AdminsForgotPasswordsController.update');
 
 Route.group(() => {
-  Route.post('/admin', 'AdminsController.store');
-  Route.get('/admin/extracts/:id', 'AdminActionsController.getExtracts');
-  Route.get('/admin/users', 'AdminActionsController.getUsers')
+  Route.post('/admins', 'AdminsController.store');
+  Route.put('/admins', 'AdminsController.update');
+  Route.delete('/admins/:id', 'AdminsController.destroy');
+  Route.get('/admins/extracts/:id', 'AdminActionsController.getExtracts');
+  Route.get('/admins/users', 'AdminActionsController.getUsers');
 }).middleware('auth:admin');
