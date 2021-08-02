@@ -30,10 +30,13 @@ Route.post('/users/login', 'UserSessionsController.store');
 Route.post('/users/passwords', 'UsersForgotPasswordsController.store');
 Route.put('/users/passwords', 'UsersForgotPasswordsController.update');
 
-Route.post('/pix', 'UserPixesController.store').middleware('auth:user');
+Route.group(() => {
+  Route.put('/users', 'UsersController.update').middleware('auth:user');
+  Route.delete('/users/:id', 'UsersController.destroy').middleware('auth:user');
+  Route.post('/users/pix', 'UserPixesController.store').middleware('auth:user');
+}).middleware('auth:user');
 
 Route.get('/admin', 'AdminsController.index');
-
 Route.post('/admins/login', 'AdminSessionsController.store');
 Route.post('/admin/passwords', 'AdminsForgotPasswordsController.store');
 Route.put('/admin/passwords', 'AdminsForgotPasswordsController.update');
