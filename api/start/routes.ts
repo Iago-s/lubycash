@@ -26,7 +26,9 @@ Route.get('/', async () => {
 
 Route.post('/client', 'ClientsController.store');
 
-Route.post('/session', 'SessionsController.store');
+Route.post('/user/session', 'SessionsController.store');
+Route.post('/user/password', 'ForgotPasswordsController.store');
+Route.put('/user/password', 'ForgotPasswordsController.update');
 
 Route.get('/users', 'UsersController.index');
 Route.post('/users', 'UsersController.store');
