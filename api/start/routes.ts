@@ -31,7 +31,8 @@ Route.group(() => {
   Route.put('/user/:id', 'UsersController.update');
   Route.delete('/user/:id', 'UsersController.destroy');
 
-  Route.post('/clients', 'ClientsController.index');
+  Route.post('/clients', 'AdminActionsController.getClients');
+  Route.post('/client/extracts/:id', 'AdminActionsController.getExtracts');
 }).middleware('auth');
 
 //Rotas publicas client
@@ -42,12 +43,3 @@ Route.post('/client', 'ClientsController.store');
 Route.group(() => {
   Route.post('/client/pix', 'PixController.store');
 }).middleware('auth');
-
-/*Route.get('/admin', 'AdminsController.index');
-Route.post('/admin', 'AdminsController.store');
-Route.group(() => {
-  Route.put('/admins', 'AdminsController.update');
-  Route.delete('/admins/:id', 'AdminsController.destroy');
-  Route.get('/admins/extracts/:id', 'AdminActionsController.getExtracts');
-  Route.get('/admins/users', 'AdminActionsController.getUsers');
-}).middleware('auth:admin');*/
