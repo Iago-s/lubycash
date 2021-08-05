@@ -26,14 +26,17 @@ Route.put('/user/password', 'ForgotPasswordsController.update');
 
 // Rotas privadas admins
 Route.group(() => {
-  Route.get('/user', 'UsersController.index');
-  Route.post('/user', 'UsersController.store');
-  Route.put('/user/:id', 'UsersController.update');
-  Route.delete('/user/:id', 'UsersController.destroy');
+  Route.get('/admin', 'AdminsController.index');
+  Route.post('/admin', 'AdminsController.store');
+  Route.put('/admin/:id', 'AdminsController.update');
+  Route.delete('/admin/:id', 'AdminsController.destroy');
 
-  Route.post('/clients', 'AdminActionsController.getClients');
-  Route.post('/client/extracts/:id', 'AdminActionsController.getExtracts');
-}).middleware('auth');
+  Route.post('/admin/clients', 'AdminActionsController.getClients');
+  Route.post('/admin/client/extracts/:id', 'AdminActionsController.getExtracts');
+}).middleware(['auth', 'admin']);
+
+//Rota publica teste criar um admin
+Route.post('/admin/new', 'AdminsController.store');
 
 //Rotas publicas client
 Route.get('/client', 'ClientsController.index');
@@ -42,4 +45,4 @@ Route.post('/client', 'ClientsController.store');
 // Rotas privadas clients
 Route.group(() => {
   Route.post('/client/pix', 'PixController.store');
-}).middleware('auth');
+}).middleware(['auth', 'client']);

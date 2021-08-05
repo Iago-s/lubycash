@@ -45,6 +45,7 @@ export default class ClientValidator {
 
     cpf_number: schema.string({}, [
       rules.required(),
+      rules.unique({ table: 'clients', column: 'cpf_number'})
     ]),
 
     zipcode: schema.string({}, [
