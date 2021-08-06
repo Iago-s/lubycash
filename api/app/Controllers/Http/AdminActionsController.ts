@@ -7,10 +7,12 @@ import ListClientValidator from 'App/Validators/ListClientsValidator';
 import Extract from 'App/Models/Extract';
 
 export default class AdminExtractsController {
-  async getExtracts({ request, response, params }: HttpContextContract) {
+  async getExtracts({ request, response, params, bouncer }: HttpContextContract) {
     const { id } = params;
 
     try {
+      await bouncer.authorize('adminOperations');
+
       await request.validate(ListExtractValidator);
       await Extract.findByOrFail('client_id', id);
 
@@ -63,12 +65,14 @@ export default class AdminExtractsController {
       return response.json(extracts);
 
     } catch (err) {
-      return response.status(404).json({ message: err.message });
+      return response.status(err.status).json({ message: err.message });
     }
   }
 
-  async getClients({ request, response }: HttpContextContract) {
+  async getClients({ request, response, bouncer }: HttpContextContract) {
     try {
+      await bouncer.authorize('adminOperations');
+
       await request.validate(ListClientValidator);
 
       const { status, date } = request.all();
@@ -117,7 +121,7 @@ export default class AdminExtractsController {
 
       return response.json(clients);
     } catch (err) {
-      return response.status(500).json({ message: err.message });
+      return response.status(err.status).json({ message: err.message });
     }
   }
 }

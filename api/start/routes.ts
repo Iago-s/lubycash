@@ -33,7 +33,7 @@ Route.group(() => {
 
   Route.post('/admin/clients', 'AdminActionsController.getClients');
   Route.post('/admin/client/extracts/:id', 'AdminActionsController.getExtracts');
-}).middleware(['auth', 'admin']);
+}).middleware('auth');
 
 //Rota publica teste criar um admin
 Route.post('/admin/new', 'AdminsController.store');
@@ -45,4 +45,4 @@ Route.post('/client', 'ClientsController.store');
 // Rotas privadas clients
 Route.group(() => {
   Route.post('/client/pix', 'PixController.store');
-}).middleware(['auth', 'client']);
+}).middleware('auth');
